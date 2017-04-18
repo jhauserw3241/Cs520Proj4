@@ -25,9 +25,9 @@ int main(int argc, char *argv[])
 		printf("Source file could not be read\n");
 	}
 
-	for(int i = 0; i < 3; i++) {
-		printf("%d\n", *(source_array + i));
-	}
+	//for(int i = 0; i < 3; i++) {
+	//	printf("%d\n", *(source_array + i));
+	//}
 
 	if(InitializeArraysFromFiles(argv[2], input_array) != 0) {
 		printf("Input file could not be read\n");
@@ -45,7 +45,7 @@ int InitializeArraysFromFiles(char *file_name, char *array) {
 	if(f) {
 		while((c = fgetc(f)) != EOF) {
 			printf("%c", c);
-//			array[i] = c;
+      strcpy(array[i], c);
 			//*(array + i) = c;
 			i++;
 		}
