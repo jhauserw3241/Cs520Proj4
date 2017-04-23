@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "base.h"
 
@@ -67,75 +68,52 @@ int InitializeArraysFromFiles(char *file_name, char *array[]) {
 	}
 	
 	fclose(f);
+
+	// Set last element to null so you don't need to keep track
+	// of the number of elements in the array
+	temp = malloc(STRING_SIZE);
+	temp[j] = NULL;
+	array[i] = temp;
+
 	return 0;
 }
 
-void FreeArrayElements(char *array[]) {
-	int size = sizeof(array)/STRING_SIZE;
-	for(int i = 0; i < size; i++) {
+void FreeArrayElements(char **array) {
+	int i;
+
+	for(i = 0; array[i] != NULL; i++) {
 		free(array[i]);
+		i++;
 	}
+
+	// Free NULL element at end
+	free(array[i]);
 }
 
-void CompareElements(char *source, char *input, char *output) {
-	printf("%c\n", source[0]);
-	printf("%c\n", source[1]);
-	printf("%c\n", source[2]);
+void CompareElements(char **source, char **input, char **output) {
+	int temp[ARRAY_SIZE];
+	int *tempNum;
+	int t = 0;
 
-	int sourceSize = sizeof(source)/STRING_SIZE;
-	int inputSize = sizeof(input)/STRING_SIZE;
-
-	printf("Source Size: %d\n", sourceSize);
-	printf("Input Size: %d\n", inputSize);
-
-	for(int i = 0; i < sourceSize; i++) {
-		printf("%s\n", source[i]);
-	}
-
-	for(int j = 0; j < inputSize; j++) {
-		printf("%s\n", input[j]);
-	}
-
-	/*for(int i = 0; i < sourceSize; i++) {
-		printf("%c\n", source[i]);
-		for(int j = 0; j < inputSize; j++) {
-			printf("%c\n", input[j]);
-			printf("Hello\n");
-			if(strstr(source[i], input[j]) != NULL) {
-				printf("    Interrupt\n");
+	for(int i = 0; source[i] != NULL; i++) {
+		if(source[i][0] != '\0') {
+			for(int j = 0; input[j] != NULL; j++) {
+				if((input[j][0] != '\0') && (strstr(input[j], source[i]))) {
+					temp[t] = j + 1;
+					t++;
+				}
 			}
 		}
-	}*/
-}
 
-/*int[][] CountArray(char **source, char**input) {
-	char *source;
-	int i, j, x = 0;
-
-	int source_counts[source.length][ARRAY_SIZE];
-	for(i = 0; i < source.length; i++) {
-		source = source[i];
-		for(j = 0; j < input.length; j++) {
-			if(strstr(input[j], source) != NULL) {
-				source_counts[i][x] = j;
-				x++;
+		printf("%s ", source[i]);
+		for(int k = 0; k < t; k++) {
+			if((k == (t - 1)) && (t != 1)) {
+				printf("%d, ", temp[k]);
+			}
+			else {
+				printf("%d\n", temp[k]);
 			}
 		}
+		t = 0;
 	}
 }
-
-void print_results(char **source, char **input) {
-	char *word;
-	int i, j = 0;
-	int source_counts[source.length][ARRAY_SIZE] = CountArray(source, input);
-
-	for(i = 0; i < sources.length; i++) {
-		source = sources[i];
-		printf("Instances of %s: ", source);
-		for(j = 0; j < source_counts[i].length; j++) {
-			if(source_counts[i][j] != NULL) {
-				printf("%d, ", source_counts[i][j]);
-			}
-		}
-	}
-}*/
