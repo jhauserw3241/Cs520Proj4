@@ -1,10 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-char *source_array[100];
-char *input_array[100];
+#define ARRAY_SIZE 50000
+#define STRING_SIZE 300
+
+char source_array[ARRAY_SIZE][STRING_SIZE];
+char input_array[ARRAY_SIZE][STRING_SIZE];
 
 int main(int argc, char *argv[]);
-int InitializeArraysFromFiles(char *file_name, char *array[]);
-void FreeArrayElements(char **array);
-void CompareElements(char **source, char **input, char **output);
+int ReadInputDataIntoArray(char file[]);
+int SearchForTerm(char term[]);
