@@ -33,36 +33,34 @@ int main(int argc, char *argv[])
 		char *t = temp;
 		t[strlen(temp) - 1] = 0;
 		strcpy(source_array[i], t);
-		SearchForTerm(source_array[i], 0, 100);
+		SearchForTerm(source_array[i], i, 0, 100);
 		i++;
 	}
 
 	fclose(f);
 
+	// Make the source list null terminated so that you don't need to find the size
+	source_array[i][0] = NULL;
+
+	PrintResults();
+
 	return 0;
 }
 
-int SearchForTerm(char term[], int start, int end) {
-	char temp[STRING_SIZE];
+int SearchForTerm(char term[], int source_index, int start, int end) {
+	int j = 0;
 
-	// Set first element to NULL to check if the string has been started
-	temp[0] = NULL;
-
-	printf("%s", term);
 	for(int i = start; (input_array[i][0]) && (i < end); i++) {
 		if(strstr(input_array[i], term)) {
-			printf(" %d", i + 1);
-
-			if(temp[0]) {
-				temp[i] = i + 1;
+			if((output_array[source_index][0] != '\0') || (j != 0)) {
+				sprintf(output_array[source_index], "%s, %i", output_array[source_index], i + 1);
 			}
 			else {
-				temp[i] = i + 1;
+				sprintf(output_array[source_index], "%i", i + 1);
 			}
+			j++;
 		}
-		printf("%s\n", temp);
 	}
-	printf("\n");
 }
 
 int ReadInputDataIntoArray(char file[]) {
@@ -87,4 +85,10 @@ int ReadInputDataIntoArray(char file[]) {
 	fclose(f);
 
 	return 0;
+}
+
+void PrintResults() {
+	for(int i = 0; source_array[i][0]; i++) {
+		printf("%s %s\n", source_array[i], output_array[i]);
+	}
 }
