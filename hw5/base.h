@@ -6,7 +6,8 @@
 
 char source_array[ARRAY_SIZE][STRING_SIZE];
 char input_array[ARRAY_SIZE][STRING_SIZE];
+char output_array[ARRAY_SIZE][STRING_SIZE];
 
 int main(int argc, char *argv[]);
 int ReadInputDataIntoArray(char file[]);
-int SearchForTerm(char term[]);
+int SearchForTerm(char term[], int start, int end);
