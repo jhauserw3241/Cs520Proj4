@@ -33,7 +33,7 @@ int main(int argc, char *argv[])
 		char *t = temp;
 		t[strlen(temp) - 1] = 0;
 		strcpy(source_array[i], t);
-		SearchForTerm(source_array[i]);
+		SearchForTerm(source_array[i], 0, 100);
 		i++;
 	}
 
@@ -42,12 +42,25 @@ int main(int argc, char *argv[])
 	return 0;
 }
 
-int SearchForTerm(char term[]) {
+int SearchForTerm(char term[], int start, int end) {
+	char temp[STRING_SIZE];
+
+	// Set first element to NULL to check if the string has been started
+	temp[0] = NULL;
+
 	printf("%s", term);
-	for(int i = 0; input_array[i][0]; i++) {
+	for(int i = start; (input_array[i][0]) && (i < end); i++) {
 		if(strstr(input_array[i], term)) {
 			printf(" %d", i + 1);
+
+			if(temp[0]) {
+				temp[i] = i + 1;
+			}
+			else {
+				temp[i] = i + 1;
+			}
 		}
+		printf("%s\n", temp);
 	}
 	printf("\n");
 }
