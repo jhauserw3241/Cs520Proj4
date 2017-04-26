@@ -33,20 +33,20 @@ int main(int argc, char *argv[])
 		//SearchForTerm(source_array[i], 0, 100);
 		i++;
 	}
-	for(int z = 0; z < 3; z++)
+	/*for(int z = 0; z < 3; z++)
 	{
 		printf("%s\n", source_array[z]);
-	}
+	}*/
 	
 	// Read in input data
 	if(ReadInputDataIntoArray(argv[2]) != 0) {
 		printf("Input file could not be read\n");
 	}
 	
-	for(int z = 0; z < 10; z++)
+	/*for(int z = 0; z < 10; z++)
 	{
 		printf("%s\n", input_array[z]);
-	}
+	}*/
 
 
 	fclose(f);
@@ -85,7 +85,7 @@ int ReadInputDataIntoArray(char file[]) {
 	f = fopen(file, "rt");
 	if(f == NULL)
 		return -1;
-	printf("In read input \n");
+	//printf("In read input \n");
 	while(fgets(temp, STRING_SIZE, f) != NULL) {
 		//char *t = temp;
 		temp[strlen(temp) - 1] = 0;
