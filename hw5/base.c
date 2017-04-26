@@ -4,7 +4,8 @@
 
 #include "base.h"
 
-#define CHUNK_SIZE 100
+#define CHUNK_SIZE 3
+#define TERMS 3
 
 int main(int argc, char *argv[])
 {	
@@ -20,11 +21,6 @@ int main(int argc, char *argv[])
 		return -1;
 	}
 
-	// Read in input data
-	if(ReadInputDataIntoArray(argv[2]) != 0) {
-		printf("Input file could not be read\n");
-	}
-
 	f = fopen(argv[1], "rt");
 	if(f == NULL)
 		return -1;
@@ -33,11 +29,15 @@ int main(int argc, char *argv[])
 		char *t = temp;
 		t[strlen(temp) - 1] = 0;
 		strcpy(source_array[i], t);
-		SearchForTerm(source_array[i], i, 0, 100);
 		i++;
 	}
 
 	fclose(f);
+
+	// Read in input data
+	if(ReadInputDataIntoArray(argv[2]) != 0) {
+		printf("Input file could not be read\n");
+	}
 
 	// Make the source list null terminated so that you don't need to find the size
 	source_array[i][0] = NULL;
@@ -67,6 +67,9 @@ int ReadInputDataIntoArray(char file[]) {
 	FILE *f;
 	char temp[STRING_SIZE];
 	int i = 0;
+	int count = 0;
+	int terms = sizeof(source_array) / STRING_SIZE;
+
 
 	f = fopen(file, "rt");
 	if(f == NULL)
@@ -76,7 +79,25 @@ int ReadInputDataIntoArray(char file[]) {
 		char *t = temp;
 		t[strlen(temp) - 1] = 0;
 		strcpy(input_array[i], t);
+
+		if((count + 1) == CHUNK_SIZE) {
+			for(int j = 0; j < terms; j++) {
+				SearchForTerm(source_array[j], j, (i + 1) - CHUNK_SIZE, (i + 1));
+			}
+			count = 0;
+		}
+		else {
+			count++;
+		}
+
 		i++;
+	}
+
+	int dif = i % CHUNK_SIZE;
+	if(dif != 0) {
+		for(int j = 0; j < terms; j++) {
+			SearchForTerm(source_array[j], j, i - dif, i);
+		}
 	}
 
 	// Add NULL to end so we don't need to keep track of the array size
