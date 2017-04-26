@@ -4,7 +4,8 @@
 
 #include "base.h"
 
-#define CHUNK_SIZE 100
+#define CHUNK_SIZE 3
+#define TERMS 3
 
 int main(int argc, char *argv[])
 {	
@@ -20,11 +21,7 @@ int main(int argc, char *argv[])
 		return -1;
 	}
 
-	// Read in input data
-	if(ReadInputDataIntoArray(argv[2]) != 0) {
-		printf("Input file could not be read\n");
-	}
-
+	// Read in source data
 	f = fopen(argv[1], "rt");
 	if(f == NULL)
 		return -1;
@@ -33,9 +30,24 @@ int main(int argc, char *argv[])
 		char *t = temp;
 		t[strlen(temp) - 1] = 0;
 		strcpy(source_array[i], t);
-		SearchForTerm(source_array[i], 0, 100);
+		//SearchForTerm(source_array[i], 0, 100);
 		i++;
 	}
+	for(int z = 0; z < 3; z++)
+	{
+		printf("%s\n", source_array[z]);
+	}
+	
+	// Read in input data
+	if(ReadInputDataIntoArray(argv[2]) != 0) {
+		printf("Input file could not be read\n");
+	}
+	
+	for(int z = 0; z < 10; z++)
+	{
+		printf("%s\n", input_array[z]);
+	}
+
 
 	fclose(f);
 
@@ -68,17 +80,26 @@ int SearchForTerm(char term[], int start, int end) {
 int ReadInputDataIntoArray(char file[]) {
 	FILE *f;
 	char temp[STRING_SIZE];
-	int i = 0;
+	int i = 0, count = 0;
 
 	f = fopen(file, "rt");
 	if(f == NULL)
 		return -1;
-	
+	printf("In read input \n");
 	while(fgets(temp, STRING_SIZE, f) != NULL) {
-		char *t = temp;
-		t[strlen(temp) - 1] = 0;
-		strcpy(input_array[i], t);
+		//char *t = temp;
+		temp[strlen(temp) - 1] = 0;
+		strcpy(input_array[i], temp);
+		if (count == CHUNK_SIZE){
+			for(int j = 0; j < TERMS; j++){
+				//spawn of threads for each term and call searchterm
+				SearchForTerm(source_array[j], i-CHUNK_SIZE, i);
+			}
+		}
 		i++;
+		count++;
+		if (count > CHUNK_SIZE)
+			count = 0;
 	}
 
 	// Add NULL to end so we don't need to keep track of the array size
