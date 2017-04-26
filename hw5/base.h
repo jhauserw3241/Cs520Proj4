@@ -10,4 +10,5 @@ char output_array[ARRAY_SIZE][STRING_SIZE];
 
 int main(int argc, char *argv[]);
 int ReadInputDataIntoArray(char file[]);
-int SearchForTerm(char term[], int start, int end);
+int SearchForTerm(char term[], int source_index, int start, int end);
+void PrintResults();

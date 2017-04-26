@@ -1,13 +1,11 @@
 #include <stdio.h>
+#include <string.h>
 #include <stdlib.h>
 
-#define ARRAY_SIZE 2000000
-#define STRING_SIZE 16
+#define ARRAY_SIZE 50000
+#define STRING_SIZE 300
 
-char char_array[ARRAY_SIZE][STRING_SIZE];
-int char_counts[26];
-
-char getRandomChar()
+/*char getRandomChar()
 {
 	int randNum = 0;
 	char randChar = ' ';
@@ -23,7 +21,6 @@ char getRandomChar()
 void init_arrays()
 {
   int i, j, randNum; 
-  char randChar;
 
   for ( i = 0; i < ARRAY_SIZE; i++) {
 	for ( j = 0; j < STRING_SIZE; j++ ) {
@@ -34,36 +31,37 @@ void init_arrays()
   for ( i = 0; i < 26; i++ ) {
   	char_counts[i] = 0;
   }
-}
+}*/
 
-void count_array()
+int[][] count_array(char ** words, char ** input)
 {
-  char theChar;
-  int i, j, charLoc;
-
-  for ( i = 0; i < ARRAY_SIZE; i++) {
-	for ( j = 0; j < STRING_SIZE; j++ ) {
-	         theChar = char_array[i][j];
-		 charLoc = ((int) theChar) - 97;
-		 char_counts[charLoc]++;
+  char * word;
+  int i, j, x = 0;
+  int word_counts[words.length][ARRAY_SIZE];
+  for(i = 0; i < words.length; i++){
+     word = words[i];
+     for( j = 0; j < input.length; j++){
+     	if(strstr(input[j],word) != NULL){
+	   word_counts[i][x] = j;
+	   x++;
 	}
+     }
   }
 }
 
-void print_results()
-{
-  int i, total = 0;
+void print_results(char ** words, char ** input)
+{ 
+  char * word;
+  int i, j = 0;
+  int word_counts[words.length][ARRAY_SIZE] = count_array(words, input);
 
-  for ( i = 0; i < 26; i++ ) {
-     total += char_counts[i];
-     printf(" %c %d\n", (char) (i + 97), char_counts[i]);
+  for ( i = 0; i < words.length; i++ ) {
+     word = words[i];
+     printf("Instances of %s: ", word);
+     for(j = 0; j < word_counts[i].length; j++){
+     	if(word_counts[i][j] != NULL){
+	    printf("%d, ", word_counts[i][j];
+	}
+     }
   }
-  printf("\nTotal characters:  %d\n", total);
 }
-
-main() {
-	init_arrays();
-	count_array();
-	print_results();
-}
-
