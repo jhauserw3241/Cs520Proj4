@@ -1,6 +1,6 @@
 shank
 beef
-bacon
-filet
+tip
+file
 venison
 spicy
