@@ -1,0 +1,19 @@
+#!/bin/bash
+
+#$ -l mem=512M
+
+#$ -l h_rt=0:05:00
+
+#$ -pe mpi-fill 8
+
+#$ -l infiniband=TRUE
+
+#$ -cwd
+
+echo -n "Stating the job at: "
+date
+
+mpirun ./base_mpi tests/lorem-ipsum-src.txt tests/lorem-ipsum-in.txt
+
+echo -n "Ending the job at: "
+date

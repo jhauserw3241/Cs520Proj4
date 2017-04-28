@@ -110,6 +110,7 @@ int ReadInputDataIntoArray(char file[]) {
 
 void PrintResults() {
 	for(int i = 0; source_array[i][0]; i++) {
-		printf("%s %s\n", source_array[i], output_array[i]);
+		if(strlen(output_array[i]) != 0)
+			printf("%s %s\n", source_array[i], output_array[i]);
 	}
 }
