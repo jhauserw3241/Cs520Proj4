@@ -62,7 +62,7 @@ int SearchForTerm(int threadID, int chunkID, int source_index, int dif) {
 		}else{
 			end = CHUNK_SIZE + start;
 		}
-		term = source_array[source_index];
+		strcpy(term, source_array[source_index]);
 	//threadID = chunkID * sizeof(source_array)/STRING_SIZE + source_index
 
 		for(i = start; (input_array[i][0]) && (i < end); i++) {
