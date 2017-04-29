@@ -1,2 +1,0 @@
-This file was added so that the folder would be added to source control.
-You need to remember to put your solution in this folder.
