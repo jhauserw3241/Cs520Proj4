@@ -10,5 +10,5 @@ char output_array[ARRAY_SIZE][STRING_SIZE];
 
 int main(int argc, char *argv[]);
 int ReadInputDataIntoArray(char file[]);
-int SearchForTerm(int threadID, int chunkID, int source_index, int dif);
+int SearchForTerm(int chunkID, int source_index, int dif);
 void PrintResults();
