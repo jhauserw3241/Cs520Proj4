@@ -3,7 +3,7 @@
 #include <string.h>
 #include <mpi.h>
 
-#include "base_mpi.h"
+#include "base_mpi_old.h"
 
 #define CHUNK_SIZE 3
 
@@ -60,7 +60,7 @@ int main(int argc, char *argv[])
 	}*/		
 	
 	
-	int count = counter/world_size;
+	int count = src_count/world_size;
 	char sub_source[count][STRING_SIZE];
 	//printf("rank: %d, size %d\n", world_rank, world_size);
 	MPI_Scatter(source_array, count*STRING_SIZE, MPI_BYTE, sub_source, count*STRING_SIZE, MPI_BYTE, 0, MPI_COMM_WORLD);
@@ -75,7 +75,7 @@ int main(int argc, char *argv[])
 	
 	for(i = 0; i < count; i++)
 	{
-		SearchForTerm(sub_source[i],i, 0, in_counter);
+		SearchForTerm(sub_source[i],i, 0, in_count);
 	}
 	
 	//debugging printing sub_out
@@ -122,12 +122,12 @@ int ReadSourceDataIntoArray(char file[]) {
 	if(f == NULL)
 		return -1;
 
-	while(fgets(temp, STRING_SIZE, f) != NULL) {
+	while((fgets(temp, STRING_SIZE, f) != NULL) && (src_count < 50000)) {
 		char *t = temp;
 		t[strlen(temp) - 1] = 0;
 		strcpy(source_array[i], t);
 		i++;
-		counter++;
+		src_count++;
 	}
 	
 	// Make the source list null terminated so that you don't need to find the size
@@ -150,7 +150,7 @@ int ReadInputDataIntoArray(char file[]) {
 	if(f == NULL)
 		return -1;
 	
-	while(fgets(temp, STRING_SIZE, f) != NULL) {
+	while((fgets(temp, STRING_SIZE, f) != NULL) && (in_count < 1000000)) {
 		char *t = temp;
 		t[strlen(temp) - 1] = 0;
 		strcpy(input_array[i], t);
@@ -166,7 +166,7 @@ int ReadInputDataIntoArray(char file[]) {
 		}
 */
 		i++;
-		in_counter++;
+		in_count++;
 	}
 /*
 	int dif = i % CHUNK_SIZE;
