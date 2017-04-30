@@ -1,0 +1,19 @@
+#!/bin/bash
+
+#$ -l mem=3G
+
+#$ -l h_rt=0:20:00
+
+#$ -pe mpi-fill 32
+
+#$ -l infiniband=TRUE
+
+#$ -cwd
+
+echo -n "Stating the job at: "
+date
+
+mpirun ./base_mpi /scratch/dan/words_4-8chars_50k /scratch/dan/wiki.1Mshort
+
+echo -n "Ending the job at: "
+date
