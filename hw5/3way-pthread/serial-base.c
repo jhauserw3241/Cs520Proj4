@@ -43,7 +43,7 @@ int main(int argc, char *argv[])
 	PrintResults();
 	
 	pthread_mutex_destroy(&search_mutex);
-	pthread_exit(NULL);
+	//pthread_exit(NULL);
 
 	return 0;
 }
@@ -96,7 +96,7 @@ void *SearchForTerm(void *args) {
 	int i;
 	for(i = start; (i < input_count) && (i < end); i++) {
 		if(strstr(input_array[i], term)) {
-			pthread_mutex_lock(&search_mutex);
+			//pthread_mutex_lock(&search_mutex);
 
 			char *out_string = output_array[source_index];
 			out_info info = output_array_info[source_index];
@@ -135,12 +135,12 @@ void *SearchForTerm(void *args) {
 			output_array[source_index] = temp;
 			output_array_info[source_index] = info;
 
-			pthread_mutex_unlock(&search_mutex);
+			//pthread_mutex_unlock(&search_mutex);
 			j++;
 		}
 	}
 
-	pthread_exit(NULL);
+	//pthread_exit(NULL);
 
 	return NULL;
 }
@@ -193,7 +193,7 @@ int ReadInputDataIntoArray(char file[]) {
 				args->end = i + 1;
 				args->term = source_array[j];
 				args->source_index = j;
-				pthread_t *cur_thread = (pthread_t *)malloc(sizeof(pthread_t));
+				/*pthread_t *cur_thread = (pthread_t *)malloc(sizeof(pthread_t));
 				printf("After allocate thread\n");
 				rc = pthread_create(cur_thread, NULL, SearchForTerm, args);
 				printf("After create thread\n");
@@ -202,8 +202,8 @@ int ReadInputDataIntoArray(char file[]) {
 				if(rc){
 					printf("ERROR: return code from pthread_create() is %d\n",rc);
 					exit(-1);
-				}
-				//SearchForTerm(args);
+				}*/
+				SearchForTerm(args);
 			}
 			count = 0;
 		}
@@ -223,14 +223,14 @@ int ReadInputDataIntoArray(char file[]) {
 			args->end = i;
 			args->term = source_array[j];
 			args->source_index = j;
-			pthread_t *cur_thread = (pthread_t *)malloc(sizeof(pthread_t));
+			/*pthread_t *cur_thread = (pthread_t *)malloc(sizeof(pthread_t));
 			rc = pthread_create(cur_thread, NULL, SearchForTerm, args);
 			PushThread(&thread_head, cur_thread);
 			if(rc){
 				printf("ERROR: return code from pthread_create() is %d\n",rc);
 				exit(-1);
-			}
-			//SearchForTerm(args);
+			}*/
+			SearchForTerm(args);
 		}
 	}
 
@@ -239,7 +239,7 @@ int ReadInputDataIntoArray(char file[]) {
 	printf("Before joining threads\n");
 	fflush(stdout);
 
-	while(thread_head != NULL) {
+	/*while(thread_head != NULL) {
 		printf("Joining a thread\n");
 		fflush(stdout);
 		rc = pthread_join(*PopThread(&thread_head), NULL);
@@ -249,7 +249,7 @@ int ReadInputDataIntoArray(char file[]) {
 			printf("ERROR: return code from pthread_join() is %d\n", rc);
 			exit(-1);
 		}
-	}
+	}*/
 
 	printf("Finish joining all threads\n");
 	fflush(stdout);

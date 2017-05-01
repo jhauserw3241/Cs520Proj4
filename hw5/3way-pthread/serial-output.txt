@@ -1,0 +1,321 @@
+Start reading in input
+After setup head node
+Add line: 0Lorem ipsum dolor sit amet, consectetur adipiscing elit. Is enim percontando atque interrogando elicere solebat eorum opiniones, quibuscum disserebat, 
+Add line: 1ut ad ea, quae ii respondissent, si quid videretur, diceret. Dum enim in una virtute sic omnia esse voluerunt, ut eam rerum selectione expoliarent nec
+Add line: 2ei quicquam, aut unde oriretur, darent, aut ubi niteretur, virtutem ipsam, quam amplexabantur, sustulerunt. Duo Reges: constructio interrete. Quae si 
+Term: quam
+Start: 0
+End: 3
+Term: illa
+Start: 0
+End: 3
+Term: nec
+Start: 0
+End: 3
+Term: velim
+Start: 0
+End: 3
+Add line: 3a vobis talia dicerentur, qualibus Caius Marius uti poterat, ut expulsus, egens, in palude demersus tropaeorum recordatione levaret dolorem suum, 
+Add line: 4audirem et plane probarem. Videmus in quodam volucrium genere non nulla indicia pietatis, cognitionem, memoriam, in multis etiam desideria videmus.
+Add line: 5Primum non saepe, deinde quae est ista relaxatio, cum et praeteriti doloris memoria recens est et futuri atque inpendentis torquet timor? Quo posito et
+Term: quam
+Start: 3
+End: 6
+Term: illa
+Start: 3
+End: 6
+Term: nec
+Start: 3
+End: 6
+Term: velim
+Start: 3
+End: 6
+Add line: 6omnium adsensu adprobato illud adsumitur, eum, qui magno sit animo atque forti, omnia, quae cadere in hominem possint, despicere ac pro nihilo putare. 
+Add line: 7Sin autem ad animum, falsum est, quod negas animi ullum esse gaudium, quod non referatur ad corpus. Ista ipsa, quae tu breviter: regem, dictatorem, 
+Add line: 8divitem solum esse sapientem, a te quidem apte ac rotunde; Atque haec ita iustitiae propria sunt, ut sint virtutum reliquarum communia. Neque enim 
+Term: quam
+Start: 6
+End: 9
+Term: illa
+Start: 6
+End: 9
+Term: nec
+Start: 6
+End: 9
+Term: velim
+Start: 6
+End: 9
+Add line: 9civitas in seditione beata esse potest nec in discordia dominorum domus; Itaque hic ipse iam pridem est reiectus; Etiam inchoatum, ut, si iuste depositum
+Add line: 10reddere in recte factis sit, in officiis ponatur depositum reddere; Sed ita falsa sunt ea, quae consequuntur, ut illa, e quibus haec nata sunt, vera esse 
+Add line: 11non possint. Qui si ea, quae dicit, ita sentiret, ut verba significant, quid inter eum et vel Pyrrhonem vel Aristonem interesset? Tenere autem virtutes 
+Term: quam
+Start: 9
+End: 12
+Term: illa
+Start: 9
+End: 12
+Term: nec
+Start: 9
+End: 12
+Term: velim
+Start: 9
+End: 12
+Add line: 12eas ipsas, quarum modo feci mentionem, nemo poterit, nisi statuerit nihil esse, quod intersit aut differat aliud ab alio, praeter honesta et turpia. Haec
+Add line: 13mihi videtur delicatior, ut ita dicam, molliorque ratio, quam virtutis vis gravitasque postulat. Nec vero alia sunt quaerenda contra Carneadeam illam 
+Add line: 14sententiam. Illud autem ipsum qui optineri potest, quod dicitis, omnis animi et voluptates et dolores ad corporis voluptates ac dolores pertinere? Si enim
+Term: quam
+Start: 12
+End: 15
+Term: illa
+Start: 12
+End: 15
+Term: nec
+Start: 12
+End: 15
+Term: velim
+Start: 12
+End: 15
+Add line: 15Zenoni licuit, cum rem aliquam invenisset inusitatam, inauditum quoque ei rei nomen inponere, cur non liceat Catoni?
+Add line: 16Qualis est igitur omnis haec, quam dico, conspiratio consensusque virtutum, tale est illud ipsum honestum, quandoquidem honestum aut ipsa virtus est aut 
+Add line: 17res gesta virtute; Qualis est igitur omnis haec, quam dico, conspiratio consensusque virtutum, tale est illud ipsum honestum, quandoquidem honestum aut ipsa
+Term: quam
+Start: 15
+End: 18
+Term: illa
+Start: 15
+End: 18
+Term: nec
+Start: 15
+End: 18
+Term: velim
+Start: 15
+End: 18
+Add line: 18virtus est aut res gesta virtute; Si sapiens, ne tum quidem miser, cum ab Oroete, praetore Darei, in crucem actus est. Studet enim meus is audire Cicero 
+Add line: 19quaenam sit istius veteris, quam commemoras, Academiae de finibus bonorum Peripateticorumque sententia. Tamen aberramus a proposito, et, ne longius, prorsus,
+Add line: 20inquam, Piso, si ista mala sunt, placet. Et qui ipsi sibi bellum indixissent, cruciari dies, noctes torqueri vellent, nec vero sese ipsi accusarent ob eam 
+Term: quam
+Start: 18
+End: 21
+Term: illa
+Start: 18
+End: 21
+Term: nec
+Start: 18
+End: 21
+Term: velim
+Start: 18
+End: 21
+Add line: 21causam, quod se male suis rebus consuluisse dicerent. Gloriosa ostentatio in constituendo summo bono. Tanta vis inerat in verbis propter earum rerum, quae 
+Add line: 22significabantur his verbis, dignitatem, ut altior fieres, ut interdum insisteres, ut nos intuens quasi testificarere laudari honestatem et iustitiam aliquando 
+Add line: 23ab Epicuro. Vobis autem, quibus nihil est aliud propositum nisi rectum atque honestum, unde officii, unde agendi principlum nascatur non reperietis. 
+Term: quam
+Start: 21
+End: 24
+Term: illa
+Start: 21
+End: 24
+Term: nec
+Start: 21
+End: 24
+Term: velim
+Start: 21
+End: 24
+Add line: 24Aristoteles, Xenocrates, tota illa familia non dabit, quippe qui valitudinem, vires, divitias, gloriam, multa alia bona esse dicant, laudabilia non dicant. 
+Add line: 25Tum ille: Finem, inquit, interrogandi, si videtur, quod quidem ego a principio ita me malle dixeram hoc ipsum providens, dialecticas captiones. Nec enim, 
+Add line: 26omnes avaritias si aeque avaritias esse dixerimus, sequetur ut etiam aequas esse dicamus. Sed est forma eius disciplinae, sicut fere ceterarum, triplex: una 
+Term: quam
+Start: 24
+End: 27
+Term: illa
+Start: 24
+End: 27
+Term: nec
+Start: 24
+End: 27
+Term: velim
+Start: 24
+End: 27
+Add line: 27pars est naturae, disserendi altera, vivendi tertia. Si vero id etiam explanare velles apertiusque diceres nihil eum fecisse nisi voluptatis causa, quo modo 
+Add line: 28eum tandem laturum fuisse existimas? Et si in ipsa gubernatione neglegentia est navis eversa, maius est peccatum in auro quam in palea.
+Add line: 29Est enim perspicuum nullam artem ipsam in se versari, sed esse aliud artem ipsam, aliud quod propositum sit arti. Idque quo magis quidam ita faciunt, ut iur
+Term: quam
+Start: 27
+End: 30
+Term: illa
+Start: 27
+End: 30
+Term: nec
+Start: 27
+End: 30
+Term: velim
+Start: 27
+End: 30
+Add line: 30e etiam reprehendantur, hoc magis intellegendum est haec ipsa nimia in quibusdam futura non fuisse, nisi quaedam essent modica natura. Qua exposita scire 
+Add line: 31cupio quae causa sit, cur Zeno ab hac antiqua constitutione desciverit, quidnam horum ab eo non sit probatum; Quod enim vituperabile est per se ipsum, id e
+Add line: 32o ipso vitium nominatum puto, vel etiam a vitio dictum vituperari. Ergo opifex plus sibi proponet ad formarum quam civis excellens ad factorum pulchritudinem?
+Term: quam
+Start: 30
+End: 33
+Term: illa
+Start: 30
+End: 33
+Term: nec
+Start: 30
+End: 33
+Term: velim
+Start: 30
+End: 33
+Add line: 33At vero si ad vitem sensus accesserit, ut appetitum quendam habeat et per se ipsa moveatur, quid facturam putas? Primum enim, si vera sunt ea, quorum 
+Add line: 34recordatione te gaudere dicis, hoc est, si vera sunt tua scripta et inventa, gaudere non potes. Atque ego: Scis me, inquam, istud idem sentire, Piso, sed a te
+Add line: 35opportune facta mentio est. Cumque ipsa virtus efficiat ita beatam vitam, ut beatior esse non possit, tamen quaedam deesse sapientibus tum, cum sint beatissimi;
+Term: quam
+Start: 33
+End: 36
+Term: illa
+Start: 33
+End: 36
+Term: nec
+Start: 33
+End: 36
+Term: velim
+Start: 33
+End: 36
+Add line: 36Ea, quae dialectici nunc tradunt et docent, nonne ab illis instituta sunt aut inventa sunt? Quia, cum a Zenone, inquam, hoc magnifice tamquam ex oraculo editur:
+Add line: 37Virtus ad beate vivendum se ipsa contenta est, et Quare? Nec tamen argumentum hoc Epicurus a parvis petivit aut etiam a bestiis, quae putat esse specula naturae,
+Add line: 38ut diceret ab iis duce natura hanc voluptatem expeti nihil dolendi. Nam si beatus umquam fuisset, beatam vitam usque ad illum a Cyro extructum rogum pertulisset.
+Term: quam
+Start: 36
+End: 39
+Term: illa
+Start: 36
+End: 39
+Term: nec
+Start: 36
+End: 39
+Term: velim
+Start: 36
+End: 39
+Add line: 39Sed alii dolore moventur, alii cupiditate, iracundia etiam multi effetuntur et, cum in mala scientes inruunt, tum se optime sibi consulere arbitrantur. Bonum 
+Add line: 40ipsum etiam quid esset, fortasse, si opus fuisset, definisses aut quod esset natura adpetendum aut quod prodesset aut quod iuvaret aut quod liberet modo. Sunt 
+Add line: 41enim levia et perinfirma, quae dicebantur a te, animi conscientia improbos excruciari, tum etiam poenae timore, qua aut afficiantur aut semper sint in metu ne 
+Term: quam
+Start: 39
+End: 42
+Term: illa
+Start: 39
+End: 42
+Term: nec
+Start: 39
+End: 42
+Term: velim
+Start: 39
+End: 42
+Add line: 42afficiantur aliquando. Audax negotium, dicerem impudens, nisi hoc institutum postea translatum ad philosophos nostros esset. Nec enim absolvi beata vita sapientis
+Add line: 43neque ad exitum perduci poterit, si prima quaeque bene ab eo consulta atque facta ipsius oblivione obruentur.
+Add line: 44Hic ego: Etsi facit hic quidem, inquam, Piso, ut vides, ea, quae praecipis, tamen mihi grata hortatio tua est. Quarum cum una sit, qua mores conformari putantur,
+Term: quam
+Start: 42
+End: 45
+Term: illa
+Start: 42
+End: 45
+Term: nec
+Start: 42
+End: 45
+Term: velim
+Start: 42
+End: 45
+Add line: 45differo eam partem, quae quasi stirps ets huius quaestionis. Itaque multi, cum in potestate essent hostium aut tyrannorum, multi in custodia, multi in exillo 
+Add line: 46dolorem suum doctrinae studiis levaverunt. Sed certe opus est ea valere et vigere et naturales motus ususque habere, ut nec absit quid eorum nec aegrum 
+Add line: 47debilitatumve sit; Possumusne ergo in vita summum bonum dicere, cum id ne in cena quidem posse videamur? Attica pubes reliquique Graeci, qui hoc anapaesto 
+Term: quam
+Start: 45
+End: 48
+Term: illa
+Start: 45
+End: 48
+Term: nec
+Start: 45
+End: 48
+Term: velim
+Start: 45
+End: 48
+Add line: 48citantur, hoc non dolere solum voluptatis nomine appellaret, illud Aristippeum contemneret, aut, si utrumque probaret, ut probat, coniungeret doloris vacuitatem 
+Add line: 49cum voluptate et duobus ultimis uteretur. Cognitis autem rerum finibus, cum intellegitur, quid sit et bonorum extremum et malorum, inventa vitae via est 
+Add line: 50conformatioque omnium officiorum, cum quaeritur, quo quodque referatur; Iam quae corporis sunt, ea nec auctoritatem cum animi partibus, comparandam et cognitionem
+Term: quam
+Start: 48
+End: 51
+Term: illa
+Start: 48
+End: 51
+Term: nec
+Start: 48
+End: 51
+Term: velim
+Start: 48
+End: 51
+Add line: 51habent faciliorem. Quia, cum a Zenone, inquam, hoc magnifice tamquam ex oraculo editur: Virtus ad beate vivendum se ipsa contenta est, et Quare? Coniunctio autem
+Add line: 52cum honestate vel voluptatis vel non dolendi id ipsum honestum, quod amplecti vult, id efficit turpe.
+Add line: 53Corporis igitur nostri partes totaque figura et forma et statura quam apta ad naturam sit, apparet, neque est dubium, quin frons, oculi, aures et reliquae partes 
+Term: quam
+Start: 51
+End: 54
+Term: illa
+Start: 51
+End: 54
+Term: nec
+Start: 51
+End: 54
+Term: velim
+Start: 51
+End: 54
+Add line: 54quales propriae sint hominis intellegatur. Nec enim absolvi beata vita sapientis neque ad exitum perduci poterit, si prima quaeque bene ab eo consulta atque facta
+Add line: 55ipsius oblivione obruentur. Societatem coniunctionis humanae munifice et aeque tuens iustitia dicitur, cui sunt adiunctae pietas, bonitas, liberalitas, benignitas,
+Add line: 56comitas, quaeque sunt generis eiusdem. Itaque non discedit ab eorum curatione, quibus praeposita vitam omnem debet gubernare, ut mirari satis istorum 
+Term: quam
+Start: 54
+End: 57
+Term: illa
+Start: 54
+End: 57
+Term: nec
+Start: 54
+End: 57
+Term: velim
+Start: 54
+End: 57
+Add line: 57inconstantiam non possim. Etsi ea quidem, quae adhuc dixisti, quamvis ad aetatem recte isto modo dicerentur. Hic dolor populi Romani duce et auctore Bruto causa 
+Add line: 58civitati libertatis fuit, ob eiusque mulieris memoriam primo anno et vir et pater eius consul est factus. Fortes viri voluptatumne calculis subductis proelium 
+Add line: 59ineunt, sanguinem pro patria profundunt, an quodam animi ardore atque impetu concitati? Eorum enim omnium multa praetermittentium, dum eligant aliquid, quod 
+Term: quam
+Start: 57
+End: 60
+Term: illa
+Start: 57
+End: 60
+Term: nec
+Start: 57
+End: 60
+Term: velim
+Start: 57
+End: 60
+Add line: 60sequantur, quasi curta sententia; Quod autem ea, quae ad naturam accommodata et per se assumenda esse dicunt, non adiungunt ad finem bonorum, desciscunt a natura et
+Add line: 61quodam modo sunt non dissimiles Aristonis.
+Term: quam
+Start: 60
+End: 62
+Term: illa
+Start: 60
+End: 62
+Term: nec
+Start: 60
+End: 62
+Term: velim
+Start: 60
+End: 62
+Before joining threads
+Finish joining all threads
+quam 3, 14, 16, 17, 18, 20, 21, 29, 33, 35, 37, 39, 45, 52, 54, 58
+illa 11, 14, 25
+nec 2, 10, 21, 47, 51
