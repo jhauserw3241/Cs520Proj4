@@ -7,7 +7,7 @@
 
 #define CHUNK_SIZE 3
 #define TERMS 3
-#define NUM_THREADS ARRAY_SIZE*(ARRAY_SIZE/CHUNK_SIZE)
+#define NUM_THREADS 833333333
 
 int main(int argc, char *argv[])
 {	
@@ -49,36 +49,48 @@ int main(int argc, char *argv[])
 	return 0;
 }
 
-int SearchForTerm(int threadID, int chunkID, int source_index, int dif) {
-	int i, j = 0;
-	int start, end;
+int SearchForTerm( int chunkID, int source_index, int dif) {
+	int i, d, j, cID, si = 0;
+	int threadID, start, end;
 	char term[STRING_SIZE];
-
-	#pragma omp private(threadID, chunkID, source_index, term, dif, i, j, start, end)
+	
+	omp_set_num_threads(NUM_THREADS);
+	printf("number of threads to work with: %d \n", NUM_THREADS);
+	printf("Life is terrible, end my suffering \n");
+	#pragma omp private(threadID, chunkID, cID, source_index, si, term, dif, d, i, j, start, end)
 	{
-		start = chunkID * CHUNK_SIZE;
-		if(dif > 0){
-			end = dif + start;
-		}else{
-			end = CHUNK_SIZE + start;
-		}
-		strcpy(term, source_array[source_index]);
-	//threadID = chunkID * sizeof(source_array)/STRING_SIZE + source_index
+		#pragma omp parallel for
+		for(cID = 0; cID <= chunkID; cID++){
+			printf("suffering hs suddenly gotten less painful, but still ow \n");
+			threadID = omp_get_thread_num();
+			printf("threadID: %d \n", threadID);
+			if(cID == chunkID)
+				d = dif;
 
-		for(i = start; (input_array[i][0]) && (i < end); i++) {
-
-			if(strstr(input_array[i], term)) {
-				
-				#pragma omp critical
-				{
-					if((output_array[source_index][0] != '\0') || (j != 0)) {
-						sprintf(output_array[source_index], "%s, %i", output_array[source_index], i + 1);
-					}else {	
-						sprintf(output_array[source_index], "%i", i + 1);
+			start = cID * CHUNK_SIZE;
+			if(d > 0){
+				end = dif + start;
+			}else{
+				end = CHUNK_SIZE + start;
+			}
+			#pragma omp parallel for
+			for(si = 0; si < source_index; si++){
+				strcpy(term, source_array[si]);
+				for(i = start; i < end; i++) {
+		
+					if(strstr(input_array[i], term)) {
+					
+						{
+							if((output_array[si][0] != '\0') || (j != 0)) {
+								sprintf(output_array[si], "%s, %i", output_array[si], i + 1);
+							}else {	
+								sprintf(output_array[si], "%i", i + 1);
+							}	
+						}
+						j++;
 					}
 				}
-				j++;
-			}
+			}	
 		}
 	}
 }
@@ -90,8 +102,6 @@ int ReadInputDataIntoArray(char file[]) {
 	int chunk_ID = 0;
 	int count = 0;
 	int terms = sizeof(source_array) / STRING_SIZE;
-	
-	omp_set_num_threads(NUM_THREADS);
 
 	f = fopen(file, "rt");
 	if(f == NULL)
@@ -105,30 +115,18 @@ int ReadInputDataIntoArray(char file[]) {
 		if((count + 1) == CHUNK_SIZE) {
 			chunk_ID++;
 			count = 0;
-
-			#pragma omp parallel
-			{
-				int j = omp_get_thread_num()-(chunk_ID * terms);
-				SearchForTerm(omp_get_thread_num(), chunk_ID, j, 0);
-			}
 		}
 		else {
 			count++;
 		}
-
 		i++;
 	}
 
 	int dif = i % CHUNK_SIZE;
 	if(dif != 0) {
 		chunk_ID++;
-		#pragma omp parallel
-		{
-			int k = omp_get_thread_num()-(chunk_ID * terms);
-			SearchForTerm(omp_get_thread_num(), chunk_ID, k, dif);
-		}
-
 	}
+	SearchForTerm(chunk_ID, terms, dif);
 
 	// Add NULL to end so we don't need to keep track of the array size
 	input_array[i][0] = NULL;

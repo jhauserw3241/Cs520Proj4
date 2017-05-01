@@ -58,6 +58,7 @@ int main(int argc, char *argv[])
 		i++;
 		source_count++;
 	}
+
 	//free(term);
 
 	fclose(f);
@@ -95,6 +96,7 @@ int SearchForTerm(char term[], int source_index, int start, int end) {
 
 int ReadInputDataIntoArray(char file[]) {
 	FILE *f;
+
 	int i = 0;
 	int count = 0;
 	int terms = sizeof(source_array) / sizeof(char **);
