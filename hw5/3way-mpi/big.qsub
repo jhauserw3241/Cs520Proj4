@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#$ -l mem=3G
+#$ -l mem=2G
 
 #$ -l h_rt=0:20:00
 
