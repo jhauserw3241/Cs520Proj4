@@ -10,11 +10,6 @@ typedef struct arg{
 	int source_index;
 }arg_t;
 
-typedef struct thread_node {
-	pthread_t *thread;
-	struct thread_node *next;
-} node_t;
-
 typedef struct output_info {
 	int count;
 	int size;
@@ -25,6 +20,4 @@ int ReadInputDataIntoArray(char file[]);
 int ReadSourceData(char *filename);
 void *SearchForTerm(void *args);
 void PrintResults();
-void PushThread(node_t **head, pthread_t *thread);
-pthread_t *PopThread(node_t **head);
 
