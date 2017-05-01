@@ -1,5 +1,6 @@
 clear
 
-gcc base.c -o base -lpthread
+rm base
+gcc base.c -o base -lpthread -fbounds-check
 
-./base source.txt input.txt
+./base ../lorem-ipsum-src.txt ../lorem-ipsum-in.txt

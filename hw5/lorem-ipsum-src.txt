@@ -2,7 +2,3 @@ quam
 illa
 nec
 velim
-quit
-dico
-cum
-autem
