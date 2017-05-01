@@ -16,6 +16,7 @@ int source_count;
 char **input_array;
 int input_count;
 char **output_array;
+out_info *output_array_info;
 
 pthread_mutex_t search_mutex;
 
@@ -82,25 +83,56 @@ void *SearchForTerm(void *args) {
 	int j = 0;
 	arg_t argt = *((arg_t *)args);
 	char *term = argt.term;
+	printf("Term: %s\n", term);
+	fflush(stdout);
 	int start = argt.start;
+	printf("Start: %d\n", start);
+	fflush(stdout);
 	int end = argt.end;
-	int diff = argt.diff;
+	printf("End: %d\n", end);
+	fflush(stdout);
 	int source_index = argt.source_index;
 
 	int i;
 	for(i = start; (i < input_count) && (i < end); i++) {
 		if(strstr(input_array[i], term)) {
 			pthread_mutex_lock(&search_mutex);
-			
-			char *temp = malloc(STRING_SIZE);
 
-			if(output_array[source_index]) {
-				sprintf(temp, "%s, %i", output_array[source_index], i + 1);
+			char *out_string = output_array[source_index];
+			out_info info = output_array_info[source_index];
+
+			char *temp;
+			char *num = malloc(STRING_SIZE);
+
+			if(out_string) {
+				// Check if the output string needs to be enlarged
+				sprintf(num, "%d", i + 1);
+				if((info.count + 2 + strlen(num)) > info.size) {
+					temp = malloc(info.size * 2);
+					info.size *= 2;
+				}
+				else {
+					temp = malloc(info.size);
+				}
+
+				// Update output string
+				sprintf(temp, "%s, %s", out_string, num);
 			}
 			else {
+				// Create first output info
+				info.count = 1;
+				info.size = STRING_SIZE;
+
+				// Start output string
+				temp = malloc(info.size);
 				sprintf(temp, "%i", i + 1);
 			}
+
+			free(output_array[source_index]);
+
+			// Update output string
 			output_array[source_index] = temp;
+			output_array_info[source_index] = info;
 
 			pthread_mutex_unlock(&search_mutex);
 			j++;
@@ -113,18 +145,20 @@ void *SearchForTerm(void *args) {
 }
 
 int ReadInputDataIntoArray(char file[]) {
+	printf("Start reading in input\n");
 	FILE *f;
 	int rc;
 	int i = 0;
 	int count = 0;
 	node_t *thread_head = NULL;
-	//pthread_t threads[NUM_THREADS];
-	//int thread_count = 0;
 	void *status;
 	arg_t *args;
 
+	printf("After setup head node\n");
+
 	// Initialize output array
 	output_array = (char **)calloc(SourceArraySize, sizeof(char *));
+	output_array_info = (out_info *)calloc(SourceArraySize, sizeof(out_info));
 
 	// Initialize input array
 	input_array = malloc(InputArraySize);
@@ -146,6 +180,7 @@ int ReadInputDataIntoArray(char file[]) {
 		char *line = malloc(STRING_SIZE);
 		memcpy(line, tempLine, strlen(tempLine));
 		line[strlen(line) - 1] = 0;
+		printf("Add line: %s\n", line);
 		input_array[i] = line;
 		input_count++;
 
@@ -157,15 +192,17 @@ int ReadInputDataIntoArray(char file[]) {
 				args->end = i + 1;
 				args->term = source_array[j];
 				args->source_index = j;
-				pthread_t cur_thread = malloc(sizeof(pthread_t));
-				//rc = pthread_create(&(threads[thread_count]), NULL, SearchForTerm, args);
-				rc = pthread_create(&cur_thread, NULL, SearchForTerm, args);
-				//thread_count++;
+				pthread_t *cur_thread = malloc(sizeof(pthread_t));
+				printf("After allocate thread\n");
+				rc = pthread_create(cur_thread, NULL, SearchForTerm, args);
+				printf("After create thread\n");
 				PushThread(&thread_head, cur_thread);
+				printf("After push thread\n");
 				if(rc){
 					printf("ERROR: return code from pthread_create() is %d\n",rc);
 					exit(-1);
 				}
+				//SearchForTerm(args);
 			}
 			count = 0;
 		}
@@ -185,30 +222,36 @@ int ReadInputDataIntoArray(char file[]) {
 			args->end = i;
 			args->term = source_array[j];
 			args->source_index = j;
-			pthread_t cur_thread = malloc(sizeof(pthread_t));
-			//rc = pthread_create(&(threads[thread_count]), NULL, SearchForTerm, args);
-			rc = pthread_create(&cur_thread, NULL, SearchForTerm, args);
-			//thread_count++;
+			pthread_t *cur_thread = malloc(sizeof(pthread_t));
+			rc = pthread_create(cur_thread, NULL, SearchForTerm, args);
 			PushThread(&thread_head, cur_thread);
 			if(rc){
 				printf("ERROR: return code from pthread_create() is %d\n",rc);
 				exit(-1);
 			}
+			//SearchForTerm(args);
 		}
 	}
 
 	fclose(f);
 
-	//int x;
+	printf("Before joining threads\n");
+	fflush(stdout);
+
 	while(thread_head != NULL) {
-	//for(x = 0; x < thread_count; x++) {
-		rc = pthread_join(PopThread(&thread_head), NULL);
-		//rc = pthread_join(threads[x], NULL);
+		printf("Joining a thread\n");
+		fflush(stdout);
+		rc = pthread_join(*PopThread(&thread_head), NULL);
+		printf("After thread has been joined\n");
+		fflush(stdout);
 		if(rc) {
 			printf("ERROR: return code from pthread_join() is %d\n", rc);
 			exit(-1);
 		}
 	}
+
+	printf("Finish joining all threads\n");
+	fflush(stdout);
 
 	return 0;
 }
@@ -223,17 +266,23 @@ void PrintResults() {
 }
 
 // Add thread to linked list
-void PushThread(node_t ** head, pthread_t thread) {
+void PushThread(node_t **head, pthread_t *thread) {
 	node_t *new_node = malloc(sizeof(node_t));
+	printf("Create new node\n");
 
 	new_node->thread = thread;
+	printf("Add thread to new node\n");
+	fflush(stdout);
 	new_node->next = *head;
+	printf("Set new node to be in list\n");
+	fflush(stdout);
 	*head = new_node;
+	printf("Set new node to head node\n");
 }
 
 // Get first thread from linked list, remove it from list,
 // and go to next element
-pthread_t PopThread(node_t **head) {
+pthread_t *PopThread(node_t **head) {
 	pthread_t retval;
 	node_t *next_node = NULL;
 
@@ -243,7 +292,12 @@ pthread_t PopThread(node_t **head) {
 
 	next_node = (*head)->next;
 	retval = (*head)->thread;
+	printf("Right before free\n");
+	fflush(stdout);
+	printf("%d\n", *head);
 	free(*head);
+	printf("Right after free\n");
+	fflush(stdout);
 	*head = next_node;
 
 	return retval;
