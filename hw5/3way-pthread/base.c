@@ -3,8 +3,8 @@
 #include <string.h>
 #include "base.h"
 
-#define CHUNK_SIZE 10
-#define NUM_THREADS 300
+#define CHUNK_SIZE 200
+#define NUM_THREADS 3000
 #define ARRAY_SIZE 100
 #define STRING_SIZE 500
 
@@ -52,7 +52,7 @@ int ReadSourceData(char *filename) {
 	FILE *f;
 	int i = 0;
 
-	source_array = malloc(SourceArraySize);
+	source_array = malloc(sizeof(char *) * SourceArraySize);
 	
 	f = fopen(filename, "rt");
 	if(f == NULL)
@@ -71,6 +71,7 @@ int ReadSourceData(char *filename) {
 		char *term = malloc(STRING_SIZE);
 		strcpy(term, tempTerm);
 		term[strlen(term) - 1] = 0;
+		printf("Add source term: %s\n", term);
 		source_array[i] = term;
 		i++;
 		source_count++;
@@ -81,14 +82,14 @@ int ReadSourceData(char *filename) {
 
 void *SearchForTerm(void *args) {
 	int j = 0;
-	arg_t argt = *((arg_t *)args);
-	char *term = argt.term;
-	//printf("Term: %s\n", term);
-	int start = argt.start;
-	//printf("Start: %d\n", start);
-	int end = argt.end;
-	//printf("End: %d\n", end);
-	int source_index = argt.source_index;
+	arg_t *argst = (arg_t *)args;
+	char *term = argst->term;
+	printf("Term: %s\n", term);
+	int start = argst->start;
+	printf("Start: %d\n", start);
+	int end = argst->end;
+	printf("End: %d\n", end);
+	int source_index = argst->source_index;
 
 	int i;
 	for(i = start; (i < input_count) && (i < end); i++) {
@@ -153,11 +154,11 @@ int ReadInputDataIntoArray(char file[]) {
 	arg_t *args;
 
 	// Initialize output array
-	output_array = (char **)calloc(SourceArraySize, sizeof(char *));
-	output_array_info = (out_info *)calloc(SourceArraySize, sizeof(out_info));
+	output_array = (char **)calloc(source_count, sizeof(char *));
+	output_array_info = (out_info *)calloc(source_count, sizeof(out_info));
 
 	// Initialize input array
-	input_array = malloc(InputArraySize);
+	input_array = malloc(sizeof(char *) * InputArraySize);
 
 	f = fopen(file, "rt");
 	if(f == NULL)
@@ -165,10 +166,19 @@ int ReadInputDataIntoArray(char file[]) {
 	
 	char *tempLine = malloc(STRING_SIZE);
 	while(fgets(tempLine, STRING_SIZE, f) != NULL) {
-		if(i >= InputArraySize) {
+		//printf("i: %d\n", i);
+		if((i + 1) >= InputArraySize) {
+			//printf("Resize in progress\n");
+			//fflush(stdout);
 			char **temp = (char **)calloc(InputArraySize * 2, sizeof(char *));
+			//printf("After allocate space for temp\n");
+			//fflush(stdout);
 			memcpy(temp, input_array, sizeof(char *) * InputArraySize);
+			//printf("Before free input array\n");
+			//fflush(stdout);
 			free(input_array);
+			//printf("After free input array\n");
+			//fflush(stdout);
 			input_array = temp;
 			InputArraySize *= 2;
 		}
@@ -176,6 +186,8 @@ int ReadInputDataIntoArray(char file[]) {
 		char *line = malloc(STRING_SIZE);
 		strcpy(line, tempLine);
 		line[strlen(line) - 1] = 0;
+		//printf("Read input line: %s\n", line);
+		//printf("Input count: %d\n", input_count + 1);
 		input_array[i] = line;
 		input_count++;
 
@@ -230,11 +242,11 @@ int ReadInputDataIntoArray(char file[]) {
 
 	int x;
 	for(x = 0; x < thread_count; x++) {
-		printf("About to join thread\n");
-		fflush(stdout);
+		//printf("About to join thread\n");
+		//fflush(stdout);
 		rc = pthread_join(threads[x], NULL);
-		printf("After join thread\n");
-		fflush(stdout);
+		//printf("After join thread\n");
+		//fflush(stdout);
 		if(rc) {
 			printf("ERROR: return code from pthread_join() is %d\n", rc);
 			exit(-1);
