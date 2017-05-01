@@ -117,7 +117,9 @@ int ReadInputDataIntoArray(char file[]) {
 	int rc;
 	int i = 0;
 	int count = 0;
-	node_t *thread_head;
+	node_t *thread_head = NULL;
+	//pthread_t threads[NUM_THREADS];
+	//int thread_count = 0;
 	void *status;
 	arg_t *args;
 
@@ -156,7 +158,9 @@ int ReadInputDataIntoArray(char file[]) {
 				args->term = source_array[j];
 				args->source_index = j;
 				pthread_t cur_thread = malloc(sizeof(pthread_t));
-				rc = pthread_create(cur_thread, NULL, SearchForTerm, args);
+				//rc = pthread_create(&(threads[thread_count]), NULL, SearchForTerm, args);
+				rc = pthread_create(&cur_thread, NULL, SearchForTerm, args);
+				//thread_count++;
 				PushThread(&thread_head, cur_thread);
 				if(rc){
 					printf("ERROR: return code from pthread_create() is %d\n",rc);
@@ -182,7 +186,9 @@ int ReadInputDataIntoArray(char file[]) {
 			args->term = source_array[j];
 			args->source_index = j;
 			pthread_t cur_thread = malloc(sizeof(pthread_t));
-			rc = pthread_create(cur_thread, NULL, SearchForTerm, args);
+			//rc = pthread_create(&(threads[thread_count]), NULL, SearchForTerm, args);
+			rc = pthread_create(&cur_thread, NULL, SearchForTerm, args);
+			//thread_count++;
 			PushThread(&thread_head, cur_thread);
 			if(rc){
 				printf("ERROR: return code from pthread_create() is %d\n",rc);
@@ -193,14 +199,15 @@ int ReadInputDataIntoArray(char file[]) {
 
 	fclose(f);
 
+	//int x;
 	while(thread_head != NULL) {
+	//for(x = 0; x < thread_count; x++) {
 		rc = pthread_join(PopThread(&thread_head), NULL);
+		//rc = pthread_join(threads[x], NULL);
 		if(rc) {
 			printf("ERROR: return code from pthread_join() is %d\n", rc);
 			exit(-1);
 		}
-
-		thread_head = thread_head->next;
 	}
 
 	return 0;
@@ -231,7 +238,7 @@ pthread_t PopThread(node_t **head) {
 	node_t *next_node = NULL;
 
 	if(*head == NULL) {
-		return retval;
+		return -1;
 	}
 
 	next_node = (*head)->next;
