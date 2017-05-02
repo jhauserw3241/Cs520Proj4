@@ -2,4 +2,4 @@ clear
 
 gcc base.c -o base -fopenmp
 
-./base source.txt input.txt
+./base ../tests/input_files/test-long-src.txt ../tests/input_files/test-long-in.txt

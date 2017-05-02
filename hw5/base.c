@@ -1,30 +1,24 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
 #include "base.h"
 
-#define ARRAY_SIZE 2
-#define STRING_SIZE 500
-#define CHUNK_SIZE 3
+#define CHUNK_SIZE 1000
+#define ARRAY_SIZE 5000
+#define STRING_SIZE 2000
 
 int SourceArraySize = ARRAY_SIZE;
 int InputArraySize = ARRAY_SIZE;
-int OutputArraySize = ARRAY_SIZE;
-
-int StringSize = STRING_SIZE;
 
 char **source_array;
-int source_count = 0;
+int source_count;
 char **input_array;
-int input_count = 0;
+int input_count;
 char **output_array;
+out_info *output_array_info;
 
 int main(int argc, char *argv[])
-{	
-	FILE *f;
-	int i = 0;
-
+{
 	// Verify that the correct number of arguments were provided
 	if(argc != 3)
 	{
@@ -33,35 +27,10 @@ int main(int argc, char *argv[])
 		return -1;
 	}
 
-	// Initialize source array
-	source_array = malloc(sizeof(char) * SourceArraySize);
-
-	f = fopen(argv[1], "rt");
-	if(f == NULL)
-		return -1;
-
-	char *tempTerm = malloc(StringSize);
-	while(fgets(tempTerm, StringSize, f) != NULL) {
-		if(i >= SourceArraySize) {
-			printf("Resize source array\n");
-			char **temp = (char **)calloc(SourceArraySize * 2, sizeof(char*));
-			memcpy(temp, source_array, sizeof(char*) * SourceArraySize);
-			free(source_array);
-			source_array = temp;
-			SourceArraySize *= 2;
-		}
-
-		char *term = malloc(StringSize);
-		memcpy(term, tempTerm, strlen(tempTerm));
-		term[strlen(term) - 1] = 0;
-		source_array[i] = term;
-		i++;
-		source_count++;
+	// Read in source data
+	if(ReadSourceData(argv[1]) != 0) {
+		printf("Source file could not be read\n");
 	}
-
-	//free(term);
-
-	fclose(f);
 
 	// Read in input data
 	if(ReadInputDataIntoArray(argv[2]) != 0) {
@@ -69,52 +38,116 @@ int main(int argc, char *argv[])
 	}
 
 	PrintResults();
-	printf("Finish printing results\n");
-
+	
 	return 0;
 }
 
-int SearchForTerm(char term[], int source_index, int start, int end) {
+int ReadSourceData(char *filename) {
+	FILE *f;
+	int i = 0;
+
+	source_array = malloc(sizeof(char *) * SourceArraySize);
+	
+	f = fopen(filename, "rt");
+	if(f == NULL)
+		return -1;
+
+	char *tempTerm = malloc(STRING_SIZE);
+	while(fgets(tempTerm, STRING_SIZE, f) != NULL) {
+		if(i >= SourceArraySize) {
+			char **temp = (char **)calloc(SourceArraySize *2, sizeof(char *));
+			memcpy(temp, source_array, sizeof(char *) * SourceArraySize);
+			free(source_array);
+			source_array = temp;
+			SourceArraySize *= 2;
+		}
+
+		char *term = malloc(STRING_SIZE);
+		memcpy(term, tempTerm, strlen(tempTerm));
+		term[strlen(term) - 1] = 0;
+		source_array[i] = term;
+		i++;
+		source_count++;
+	}
+
+	fclose(f);
+}
+
+void *SearchForTerm(void *args) {
 	int j = 0;
+	arg_t argt = *((arg_t *)args);
+	char *term = argt.term;
+	int start = argt.start;
+	int end = argt.end;
+	int source_index = argt.source_index;
 
-	for(int i = start; (i < input_count) && (i < end); i++) {
+	int i;
+	for(i = start; (i < input_count) && (i < end); i++) {
 		if(strstr(input_array[i], term)) {
-			char *temp = malloc(sizeof(char) * StringSize);
+			char *out_string = output_array[source_index];
+			out_info info = output_array_info[source_index];
 
-			if(output_array[source_index] || (j != 0)) {
-				sprintf(temp, "%s, %i", output_array[source_index], i + 1);
+			char *temp;
+			char *num = malloc(STRING_SIZE);
+
+			if(out_string) {
+				// Check if the output string needs to be enlarged
+				sprintf(num, "%d", i + 1);
+				if((info.count + 2 + strlen(num)) > info.size) {
+					temp = malloc(info.size * 2);
+					info.size *= 2;
+				}
+				else {
+					temp = malloc(info.size);
+				}
+
+				// Update output string
+				sprintf(temp, "%s, %s", out_string, num);
+				info.count += 2 + strlen(num);
 			}
 			else {
+				// Create first output info
+				info.count = 1;
+				info.size = STRING_SIZE;
+
+				// Start output string
+				temp = malloc(info.size);
 				sprintf(temp, "%i", i + 1);
 			}
 
+			// Update output string
 			output_array[source_index] = temp;
+			output_array_info[source_index] = info;
+
 			j++;
 		}
 	}
+
+	return NULL;
 }
 
 int ReadInputDataIntoArray(char file[]) {
 	FILE *f;
-
+	int rc;
 	int i = 0;
 	int count = 0;
-	int terms = sizeof(source_array) / sizeof(char **);
-	
+	void *status;
+	arg_t *args;
+
 	// Initialize output array
-	output_array = (char **)calloc(SourceArraySize, sizeof(char));
+	output_array = (char **)calloc(SourceArraySize, sizeof(char *));
+	output_array_info = (out_info *)calloc(SourceArraySize, sizeof(out_info));
 
 	// Initialize input array
-	input_array = malloc(sizeof(char) * InputArraySize);
+	input_array = malloc(sizeof(char *) * InputArraySize);
 
 	f = fopen(file, "rt");
 	if(f == NULL)
 		return -1;
 	
-	char *tempLine = malloc(sizeof(char) * StringSize);
-	while(fgets(tempLine, StringSize, f) != NULL) {
+	char *tempLine = malloc(STRING_SIZE);
+	while(fgets(tempLine, STRING_SIZE, f) != NULL) {
 		if(i >= InputArraySize) {
-			printf("Resize input array\n");
 			char **temp = (char **)calloc(InputArraySize * 2, sizeof(char *));
 			memcpy(temp, input_array, sizeof(char *) * InputArraySize);
 			free(input_array);
@@ -122,15 +155,21 @@ int ReadInputDataIntoArray(char file[]) {
 			InputArraySize *= 2;
 		}
 
-		char *line = malloc(sizeof(char) * StringSize);
+		char *line = malloc(STRING_SIZE);
 		memcpy(line, tempLine, strlen(tempLine));
 		line[strlen(line) - 1] = 0;
 		input_array[i] = line;
-
+		input_count++;
 
 		if((count + 1) == CHUNK_SIZE) {
-			for(int j = 0; j < source_count; j++) {
-				SearchForTerm(source_array[j], j, (i + 1) - CHUNK_SIZE, (i + 1));
+			int j;
+			for(j = 0; j < source_count; j++) {
+				args = malloc(sizeof(arg_t *));
+				args->start = (i + 1) - CHUNK_SIZE;
+				args->end = i + 1;
+				args->term = source_array[j];
+				args->source_index = j;
+				SearchForTerm(args);
 			}
 			count = 0;
 		}
@@ -139,13 +178,18 @@ int ReadInputDataIntoArray(char file[]) {
 		}
 
 		i++;
-		input_count++;
 	}
 
 	int dif = i % CHUNK_SIZE;
 	if(dif != 0) {
-		for(int j = 0; j < source_count; j++) {
-			SearchForTerm(source_array[j], j, i - dif, i);
+		int j;
+		for(j = 0; j < source_count; j++) {
+			args = malloc(sizeof(arg_t *));
+			args->start = i - dif;
+			args->end = i;
+			args->term = source_array[j];
+			args->source_index = j;
+			SearchForTerm(args);
 		}
 	}
 
@@ -155,14 +199,10 @@ int ReadInputDataIntoArray(char file[]) {
 }
 
 void PrintResults() {
-	for(int i = 0; i < source_count; i++) {
-		printf("Before value check\n");
-		printf("Output value: %s\n", output_array[i]);
+	int i;
+	for(i = 0; i < source_count; i++) {
 		if(output_array[i]) {
 			printf("%s %s\n", source_array[i], output_array[i]);
-		}
-		else {
-			printf("No output\n");
 		}
 	}
 }
