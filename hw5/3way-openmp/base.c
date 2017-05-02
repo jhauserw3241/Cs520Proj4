@@ -48,7 +48,7 @@ int ReadSourceData(char *filename) {
 	FILE *f;
 	int i = 0;
 
-	source_array = malloc(SourceArraySize);
+	source_array = malloc(sizeof(char *) * SourceArraySize);
 	
 	f = fopen(filename, "rt");
 	if(f == NULL)
@@ -153,7 +153,7 @@ int ReadInputDataIntoArray(char file[]) {
 	output_array_info = (out_info *)calloc(SourceArraySize, sizeof(out_info));
 
 	// Initialize input array
-	input_array = malloc(InputArraySize);
+	input_array = malloc(sizeof(char *) * InputArraySize);
 
 	if(f == NULL)
 		return -1;
