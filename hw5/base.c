@@ -3,10 +3,9 @@
 #include <string.h>
 #include "base.h"
 
-#define CHUNK_SIZE 3
-#define NUM_THREADS 50
-#define ARRAY_SIZE 100
-#define STRING_SIZE 500
+#define CHUNK_SIZE 1000
+#define ARRAY_SIZE 5000
+#define STRING_SIZE 2000
 
 int SourceArraySize = ARRAY_SIZE;
 int InputArraySize = ARRAY_SIZE;
@@ -129,6 +128,7 @@ void *SearchForTerm(void *args) {
 
 int ReadInputDataIntoArray(char file[]) {
 	FILE *f;
+	int rc;
 	int i = 0;
 	int count = 0;
 	void *status;
