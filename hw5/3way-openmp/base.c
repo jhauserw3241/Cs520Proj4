@@ -4,10 +4,10 @@
 #include <omp.h>
 #include "base.h"
 
-#define CHUNK_SIZE 300
-#define NUM_THREADS 1000
-#define ARRAY_SIZE 5000
-#define STRING_SIZE 500
+#define CHUNK_SIZE 50
+//#define NUM_THREADS 1000
+#define ARRAY_SIZE 1000
+#define STRING_SIZE 1000
 
 int SourceArraySize = ARRAY_SIZE;
 int InputArraySize = ARRAY_SIZE;
@@ -106,6 +106,8 @@ void *SearchForTerm(void *args) {
 				// Check if the output string needs to be enlarged
 				sprintf(num, "%d", i + 1);
 				if((info.count + 2 + strlen(num)) > info.size) {
+					printf("resize output string\n");
+					fflush(stdout);
 					temp = malloc(info.size * 2);
 					info.size *= 2;
 				}
@@ -188,7 +190,7 @@ int ReadInputDataIntoArray(char file[]) {
 			count = 0;
 		}
 		else {
-		count++;
+			count++;
 		}
 		i++;
 	}
