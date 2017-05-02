@@ -2,4 +2,4 @@ clear
 
 make base
 
-./base source.txt input.txt
+./base tests/input_files/source.txt tests/input_files/input.txt
