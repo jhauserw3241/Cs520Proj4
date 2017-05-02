@@ -4,9 +4,9 @@
 #include <omp.h>
 #include "base.h"
 
-#define CHUNK_SIZE 3
-#define NUM_THREADS 50
-#define ARRAY_SIZE 100
+#define CHUNK_SIZE 300
+#define NUM_THREADS 1000
+#define ARRAY_SIZE 5000
 #define STRING_SIZE 500
 
 int SourceArraySize = ARRAY_SIZE;
@@ -58,7 +58,7 @@ int ReadSourceData(char *filename) {
 	while(fgets(tempTerm, STRING_SIZE, f) != NULL) {
 		if(i >= SourceArraySize) {
 			char **temp = (char **)calloc(SourceArraySize *2, sizeof(char *));
-			strcpy(temp, source_array);
+			memcpy(temp, source_array, sizeof(char *) * SourceArraySize);
 			free(source_array);
 			source_array = temp;
 			SourceArraySize *= 2;
@@ -90,7 +90,8 @@ void *SearchForTerm(void *args) {
 	int source_index = argt.source_index;
 
 	int i;
-	#pragma omp for
+	#pragma omp private(source_index, i, start, end, term, j)
+	{
 	for(i = start; i < end; i++) {
 		if(strstr(input_array[i], term)) {
 			#pragma omp critical
@@ -135,18 +136,17 @@ void *SearchForTerm(void *args) {
 			j++;
 		}
 	}
+	}
 	return NULL;
 }
 
 int ReadInputDataIntoArray(char file[]) {
 	printf("Start reading in input\n");
-	FILE *f;
+	FILE *f = fopen(file, "rt");
 	int i = 0;
 	int count = 0;
 	void *status;
 	arg_t *args;
-
-	omp_set_num_threads(NUM_THREADS);
 
 	// Initialize output array
 	output_array = (char **)calloc(SourceArraySize, sizeof(char *));
@@ -159,61 +159,55 @@ int ReadInputDataIntoArray(char file[]) {
 		return -1;
 		
 	char *tempLine = malloc(STRING_SIZE);
-
-	#pragma omp parallel
-	{
-		while(fgets(tempLine, STRING_SIZE, f) != NULL) {
-			if(i >= InputArraySize) {
-				char **temp = (char **)calloc(InputArraySize * 2, sizeof(char *));
-				strcpy(temp, input_array);
-				free(input_array);
-				input_array = temp;
-				InputArraySize *= 2;
-			}
-
-			char *line = malloc(STRING_SIZE);
-			strcpy(line, tempLine);
-			line[strlen(line) - 1] = 0;
-			printf("Add line: %s\n", line);
-			input_array[i] = line;
-			input_count++;
-
-			if((count + 1) == CHUNK_SIZE) {
-				int j;
-				for(j = 0; j < source_count; j++) {
-					args = malloc(sizeof(arg_t *));
-					args->start = (i + 1) - CHUNK_SIZE;
-					args->end = i + 1;
-					args->term = source_array[j];
-					args->source_index = j;
-					SearchForTerm(args);
-				}
-				count = 0;
-			}
-			else {
-				count++;
-			}
-
-			i++;
+	while(fgets(tempLine, STRING_SIZE, f) != NULL) {
+		if(i >= InputArraySize) {
+			char **temp = (char **)calloc(InputArraySize * 2, sizeof(char *));
+			memcpy(temp, input_array, sizeof(char *) * SourceArraySize);
+			free(input_array);
+			input_array = temp;
+			InputArraySize *= 2;
 		}
 
-		int dif = i % CHUNK_SIZE;
-		if(dif != 0) {
+		char *line = malloc(STRING_SIZE);
+		strcpy(line, tempLine);
+		line[strlen(line) - 1] = 0;
+		input_array[i] = line;
+		input_count++;
+
+		if((count + 1) == CHUNK_SIZE) {
 			int j;
+			#pragma omp parallel for
 			for(j = 0; j < source_count; j++) {
 				args = malloc(sizeof(arg_t *));
-				args->start = i - dif;
-				args->end = i;
+				args->start = (i + 1) - CHUNK_SIZE;
+				args->end = i + 1;
 				args->term = source_array[j];
 				args->source_index = j;
 				SearchForTerm(args);
 			}
+			count = 0;
 		}
+		else {
+		count++;
+		}
+		i++;
 	}
+	int dif = i % CHUNK_SIZE;
+	if(dif != 0) {
+		int j;
+		#pragma omp parallel for
+		for(j = 0; j < source_count; j++) {
+			args = malloc(sizeof(arg_t *));
+			args->start = i - dif;
+			args->end = i;
+			args->term = source_array[j];
+			args->source_index = j;
+			SearchForTerm(args);
+			}	
+		}	
+	
 
 	fclose(f);
-
-	fflush(stdout);
 
 	return 0;
 }
