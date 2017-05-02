@@ -1,14 +1,30 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <pthread.h>
 
-#define ARRAY_SIZE 50000
-#define STRING_SIZE 300
+typedef struct arg{
+	char *term;
+	int diff;
+	int start;
+	int end;
+	int source_index;
+}arg_t;
 
-char source_array[ARRAY_SIZE][STRING_SIZE];
-char input_array[ARRAY_SIZE][STRING_SIZE];
-char output_array[ARRAY_SIZE][STRING_SIZE];
+typedef struct thread_node {
+	pthread_t *thread;
+	struct thread_node *next;
+} node_t;
+
+typedef struct output_info {
+	int count;
+	int size;
+} out_info;
 
 int main(int argc, char *argv[]);
 int ReadInputDataIntoArray(char file[]);
-int SearchForTerm(int chunkID, int source_index, int dif);
+int ReadSourceData(char *filename);
+void *SearchForTerm(void *args);
 void PrintResults();
+void PushThread(node_t **head, pthread_t *thread);
+pthread_t *PopThread(node_t **head);
+
