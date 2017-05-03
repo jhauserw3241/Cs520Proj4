@@ -62,14 +62,14 @@ int ReadSourceData(char *filename) {
 	while(fgets(tempTerm, STRING_SIZE, f) != NULL) {
 		if(i >= SourceArraySize) {
 			char **temp = (char **)calloc(SourceArraySize *2, sizeof(char *));
-			memcpy(temp, source_array, sizeof(char *) * SourceArraySize);
+			strcpy(temp, source_array);
 			free(source_array);
 			source_array = temp;
 			SourceArraySize *= 2;
 		}
 
 		char *term = malloc(STRING_SIZE);
-		memcpy(term, tempTerm, strlen(tempTerm));
+		strcpy(term, tempTerm);
 		term[strlen(term) - 1] = 0;
 		source_array[i] = term;
 		i++;
@@ -163,14 +163,14 @@ int ReadInputDataIntoArray(char file[]) {
 	while(fgets(tempLine, STRING_SIZE, f) != NULL) {
 		if(i >= InputArraySize) {
 			char **temp = (char **)calloc(InputArraySize * 2, sizeof(char *));
-			memcpy(temp, input_array, sizeof(char *) * InputArraySize);
+			strcpy(temp, input_array);
 			free(input_array);
 			input_array = temp;
 			InputArraySize *= 2;
 		}
 
 		char *line = malloc(STRING_SIZE);
-		memcpy(line, tempLine, strlen(tempLine));
+		strcpy(line, tempLine);
 		line[strlen(line) - 1] = 0;
 		input_array[i] = line;
 		input_count++;

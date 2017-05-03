@@ -4,10 +4,10 @@
 #include <omp.h>
 #include "base.h"
 
-#define CHUNK_SIZE 300
-#define NUM_THREADS 1000
+#define CHUNK_SIZE 1000
+//#define NUM_THREADS 1000
 #define ARRAY_SIZE 5000
-#define STRING_SIZE 500
+#define STRING_SIZE 2000
 
 int SourceArraySize = ARRAY_SIZE;
 int InputArraySize = ARRAY_SIZE;
@@ -79,14 +79,8 @@ void *SearchForTerm(void *args) {
 	int j = 0;
 	arg_t argt = *((arg_t *)args);
 	char *term = argt.term;
-	printf("Term: %s\n", term);
-	fflush(stdout);
 	int start = argt.start;
-	printf("Start: %d\n", start);
-	fflush(stdout);
 	int end = argt.end;
-	printf("End: %d\n", end);
-	fflush(stdout);
 	int source_index = argt.source_index;
 
 	int i;
@@ -141,7 +135,6 @@ void *SearchForTerm(void *args) {
 }
 
 int ReadInputDataIntoArray(char file[]) {
-	printf("Start reading in input\n");
 	FILE *f = fopen(file, "rt");
 	int i = 0;
 	int count = 0;
@@ -188,7 +181,7 @@ int ReadInputDataIntoArray(char file[]) {
 			count = 0;
 		}
 		else {
-		count++;
+			count++;
 		}
 		i++;
 	}
