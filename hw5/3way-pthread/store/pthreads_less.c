@@ -1,11 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "base.h"
+#include "pthreads_less.h"
 
-#define CHUNK_SIZE 1000
-#define ARRAY_SIZE 5000
-#define STRING_SIZE 2000
+#define CHUNK_SIZE 3
+#define ARRAY_SIZE 100
+#define STRING_SIZE 100
 
 int SourceArraySize = ARRAY_SIZE;
 int InputArraySize = ARRAY_SIZE;
@@ -38,6 +38,8 @@ int main(int argc, char *argv[])
 	}
 
 	PrintResults();
+
+	pthread_exit(NULL);
 	
 	return 0;
 }
@@ -76,50 +78,56 @@ int ReadSourceData(char *filename) {
 void *SearchForTerm(void *args) {
 	int j = 0;
 	arg_t argt = *((arg_t *)args);
-	char *term = argt.term;
+	char *term = malloc(sizeof(char) * STRING_SIZE);
 	int start = argt.start;
 	int end = argt.end;
-	int source_index = argt.source_index;
+	int source_index;
 
-	int i;
-	for(i = start; (i < input_count) && (i < end); i++) {
-		if(strstr(input_array[i], term)) {
-			char *out_string = output_array[source_index];
-			out_info info = output_array_info[source_index];
+	int k;
+	for(k = 0; k < source_count; k++) {
+		strcpy(term, source_array[k]);
+		source_index = k;
 
-			char *temp;
-			char *num = malloc(STRING_SIZE);
+		int i;
+		for(i = start; (i < input_count) && (i < end); i++) {
+			if(strstr(input_array[i], term)) {
+				char *out_string = output_array[source_index];
+				out_info info = output_array_info[source_index];
 
-			if(out_string) {
-				// Check if the output string needs to be enlarged
-				sprintf(num, "%d", i + 1);
-				if((info.count + 2 + strlen(num)) > info.size) {
-					temp = malloc(info.size * 2);
-					info.size *= 2;
+				char *temp;
+				char *num = malloc(sizeof(char) * STRING_SIZE);
+
+				if(out_string) {
+					// Check if the output string needs to be enlarged
+					sprintf(num, "%d", i + 1);
+					if((info.count + 2 + strlen(num)) > info.size) {
+						temp = malloc(info.size * 2);
+						info.size *= 2;
+					}
+					else {
+						temp = malloc(info.size);
+					}
+
+					// Update output string
+					sprintf(temp, "%s, %s", out_string, num);
+					info.count += 2 + strlen(num);
 				}
 				else {
+					// Create first output info
+					info.count = 1;
+					info.size = STRING_SIZE;
+
+					// Start output string
 					temp = malloc(info.size);
+					sprintf(temp, "%i", i + 1);
 				}
 
 				// Update output string
-				sprintf(temp, "%s, %s", out_string, num);
-				info.count += 2 + strlen(num);
+				output_array[source_index] = temp;
+				output_array_info[source_index] = info;
+
+				j++;
 			}
-			else {
-				// Create first output info
-				info.count = 1;
-				info.size = STRING_SIZE;
-
-				// Start output string
-				temp = malloc(info.size);
-				sprintf(temp, "%i", i + 1);
-			}
-
-			// Update output string
-			output_array[source_index] = temp;
-			output_array_info[source_index] = info;
-
-			j++;
 		}
 	}
 
@@ -128,7 +136,6 @@ void *SearchForTerm(void *args) {
 
 int ReadInputDataIntoArray(char file[]) {
 	FILE *f;
-	int rc;
 	int i = 0;
 	int count = 0;
 	void *status;
@@ -162,15 +169,11 @@ int ReadInputDataIntoArray(char file[]) {
 		input_count++;
 
 		if((count + 1) == CHUNK_SIZE) {
-			int j;
-			for(j = 0; j < source_count; j++) {
-				args = malloc(sizeof(arg_t *));
-				args->start = (i + 1) - CHUNK_SIZE;
-				args->end = i + 1;
-				args->term = source_array[j];
-				args->source_index = j;
-				SearchForTerm(args);
-			}
+			args = malloc(sizeof(arg_t *));
+			args->start = (i + 1) - CHUNK_SIZE;
+			args->end = i + 1;
+			SearchForTerm(args);
+
 			count = 0;
 		}
 		else {
@@ -182,15 +185,10 @@ int ReadInputDataIntoArray(char file[]) {
 
 	int dif = i % CHUNK_SIZE;
 	if(dif != 0) {
-		int j;
-		for(j = 0; j < source_count; j++) {
-			args = malloc(sizeof(arg_t *));
-			args->start = i - dif;
-			args->end = i;
-			args->term = source_array[j];
-			args->source_index = j;
-			SearchForTerm(args);
-		}
+		args = malloc(sizeof(arg_t *));
+		args->start = i - dif;
+		args->end = i;
+		SearchForTerm(args);
 	}
 
 	fclose(f);

@@ -3,4 +3,4 @@ clear
 rm base
 make base
 
-./base tests/input_files/test-long-src.txt tests/input_files/test-long-in.txt
+./base tests/input_files/source.txt tests/input_files/input.txt
