@@ -2,12 +2,12 @@
 #include <stdlib.h>
 #include <string.h>
 #include <omp.h>
-#include "base.h"
+#include "openmp.h"
 
 #define CHUNK_SIZE 1000
-//#define NUM_THREADS 1000
-#define ARRAY_SIZE 5000
-#define STRING_SIZE 2000
+#define NUM_THREADS 5
+#define ARRAY_SIZE 50000
+#define STRING_SIZE 500
 
 int SourceArraySize = ARRAY_SIZE;
 int InputArraySize = ARRAY_SIZE;
@@ -19,23 +19,16 @@ int input_count;
 char **output_array;
 out_info *output_array_info;
 
-int main(int argc, char *argv[])
+int run(char *source_file, char *input_file)
 {
-	// Verify that the correct number of arguments were provided
-	if(argc != 3)
-	{
-		printf("The structure of the command should be:\n");
-		printf("    ./base source_file.txt input_file.txt\n");
-		return -1;
-	}
 
 	// Read in source data
-	if(ReadSourceData(argv[1]) != 0) {
+	if(ReadSourceData(source_file) != 0) {
 		printf("Source file could not be read\n");
 	}
 
 	// Read in input data
-	if(ReadInputDataIntoArray(argv[2]) != 0) {
+	if(ReadInputDataIntoArray(input_file) != 0) {
 		printf("Input file could not be read\n");
 	}
 
@@ -87,9 +80,8 @@ void *SearchForTerm(void *args) {
 	#pragma omp private(source_index, i, start, end, term, j)
 	{
 	for(i = start; i < end; i++) {
+		printf("Compare: %s %s", term, input_array[i]);
 		if(strstr(input_array[i], term)) {
-			#pragma omp critical
-			{
 			char *out_string = output_array[source_index];
 			out_info info = output_array_info[source_index];
 
@@ -126,7 +118,6 @@ void *SearchForTerm(void *args) {
 			// Update output string
 			output_array[source_index] = temp;
 			output_array_info[source_index] = info;
-			}
 			j++;
 		}
 	}
@@ -166,10 +157,14 @@ int ReadInputDataIntoArray(char file[]) {
 		line[strlen(line) - 1] = 0;
 		input_array[i] = line;
 		input_count++;
-
+		
+		#pragma omp parallel num_threads(NUM_THREADS)
+		{
+		#pragma omp single
 		if((count + 1) == CHUNK_SIZE) {
 			int j;
-			#pragma omp parallel for
+			int sum = 0;
+			#pragma omp parallel for reduction(+:sum)
 			for(j = 0; j < source_count; j++) {
 				args = malloc(sizeof(arg_t *));
 				args->start = (i + 1) - CHUNK_SIZE;
@@ -183,12 +178,14 @@ int ReadInputDataIntoArray(char file[]) {
 		else {
 			count++;
 		}
+		}
 		i++;
 	}
 	int dif = i % CHUNK_SIZE;
 	if(dif != 0) {
 		int j;
-		#pragma omp parallel for
+		int sum = 0;
+		#pragma omp parallel for reduction(+:sum)
 		for(j = 0; j < source_count; j++) {
 			args = malloc(sizeof(arg_t *));
 			args->start = i - dif;
