@@ -2,12 +2,12 @@
 #include <stdlib.h>
 #include <string.h>
 #include <omp.h>
-#include "base.h"
+#include "openmp-sol.h"
 
-#define CHUNK_SIZE 1000
+#define CHUNK_SIZE 50000
 #define NUM_THREADS 4
-#define ARRAY_SIZE 5000
-#define STRING_SIZE 2000
+#define ARRAY_SIZE 50000
+#define STRING_SIZE 10000
 
 int SourceArraySize = ARRAY_SIZE;
 int InputArraySize = ARRAY_SIZE;
